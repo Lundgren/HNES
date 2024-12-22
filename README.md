@@ -2,6 +2,15 @@ Manifest V3 Fork
 ============
 This fork has been updated to support Manifest V3 so the extension can continue working after Google removed support for V2.
 
+To use this fork: 
+- Clone or download a copy locally
+- Go into extensions on your browser and enable 'Developer Mode'
+- Click 'Load unpacked' and select the downloaded folder
+
+Note that this has only been tested on Chrome at the moment.
+
+This set up works for my use case but if there's a lot of users that still uses this I might publish the fork to Firefox & Chrome extension pages to make it easier to use.
+
 [Original project](https://github.com/etcet/HNES)
 
 Warning: Unmaintained

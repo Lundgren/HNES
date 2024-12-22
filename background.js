@@ -1,31 +1,60 @@
-// Add event listeners
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  console.log('REQUEST', request.method, request)
-  if (request.method == "getAllLocalStorage") {
-    sendResponse({data: localStorage});
-  }
-  else if (request.method == "getLocalStorage") {
-    sendResponse({data: localStorage[request.key]});
-  }
-  else if (request.method == "setLocalStorage") {
-    localStorage[request.key] = request.value;
-    sendResponse({});
-  }
-  else if (request.method == "getUserData") {
-    var data = getUserData(request.usernames);
-    sendResponse({ data: data });
-  }
-  else {
-    sendResponse({});
-  }
+// Service worker activation
+chrome.runtime.onInstalled.addListener(() => {
+  console.log('Extension installed');
 });
 
-function getUserData(usernames) {
-  var results = {};
-  for (var i = 0; i < usernames.length; i++) {
-    var key = usernames[i],
-        value = localStorage[key];
-    results[key] = value;
+// Keep service worker alive
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  return true;
+});
+
+// Message handling with async storage
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log('REQUEST', request.method, request);
+  
+  async function handleMessage() {
+    try {
+      switch (request.method) {
+        case "getAllLocalStorage":
+          const all = await chrome.storage.local.get(null);
+          sendResponse({data: all});
+          break;
+        
+        case "getLocalStorage":
+          const item = await chrome.storage.local.get(request.key);
+          sendResponse({data: item[request.key]});
+          break;
+        
+        case "setLocalStorage":
+          await chrome.storage.local.set({
+            [request.key]: request.value
+          });
+          sendResponse({});
+          break;
+        
+        case "getUserData":
+          const userData = await getUserData(request.usernames);
+          sendResponse({data: userData});
+          break;
+        
+        default:
+          sendResponse({});
+      }
+    } catch (error) {
+      console.error('Error handling message:', error);
+      sendResponse({error: error.message});
+    }
+  }
+
+  handleMessage();
+  return true; 
+});
+
+async function getUserData(usernames) {
+  const results = {};
+  for (const username of usernames) {
+    const data = await chrome.storage.local.get(username);
+    results[username] = data[username];
   }
   return results;
 }

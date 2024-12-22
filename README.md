@@ -1,3 +1,9 @@
+Manifest V3 Fork
+============
+This fork has been updated to support Manifest V3 so the extension can continue working after Google removed support for V2.
+
+[Original project](https://github.com/etcet/HNES)
+
 Warning: Unmaintained
 ============
 I don't have much desire to keep maintaining this project, so please don't create pull requests for any new features or anything which is not a bug or regression.

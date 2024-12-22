@@ -1,7 +1,7 @@
 {
   "name": "Hacker News Enhancement Suite: Forked for V3",
   "short_name": "HNES",
-  "version": "1.7.0.0",
+  "version": "1.7.0.1",
   "description": "Hacker News Enhanced with Manifest V3 support",
   "manifest_version": 3,
   "background": {
